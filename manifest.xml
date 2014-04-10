@@ -1,0 +1,28 @@
+<package>
+  <description brief="uibk_planning_node">
+
+     uibk_planning_node
+
+  </description>
+  <author>Martin Griesser</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/uibk_planning_node</url>
+  
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="trajectory_msgs"/>
+  <depend package="visualization_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="definitions" />
+  <depend package="tf"/>
+  <depend package="tf_conversions"/>
+  
+  <depend package="moveit_ros_planning"/>
+  <depend package="moveit_ros_planning_interface"/>
+  <depend package="moveit_ros_robot_interaction"/>
+  <depend package="moveit_core"/>
+
+</package>
+
+

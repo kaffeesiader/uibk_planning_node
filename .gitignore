@@ -1,0 +1,30 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+*.py
+*.pyc
+
+build
+devel
+install
+lib
+bin
+*_gen
+
+.project
+.cproject
+.pydevproject
+.settings
+_*
+default_warehouse_mongo_db
