@@ -149,7 +149,7 @@ private:
 	 * @param d_grasp The definintions::Grasp message where the data comes from
 	 * @param m_grasp The moveit_msgs::Grasp message to fill
 	 */
-	void DefGraspToMoveitGrasp(const string &grasp_id, const definitions::Grasp &d_grasp, moveit_msgs::Grasp m_grasp) {
+	void DefGraspToMoveitGrasp(const string &grasp_id, const definitions::Grasp &d_grasp, moveit_msgs::Grasp &m_grasp) {
 
 		trajectory_msgs::JointTrajectory pre_grasp_posture;
 		fillTrajectory(pre_grasp_posture, d_grasp.grasp_trajectory[0]);
@@ -194,7 +194,7 @@ private:
 			ROS_ERROR("Unable to plan while moving the robot!");
 			return false;
 		}
-		
+
 		string arm = "right_arm";
 
 		ROS_INFO("Received trajectory planning request.");
@@ -251,6 +251,8 @@ private:
 		if(result->status == PlanningHelper::SUCCESS) {
 			PlanningResultToTrajectory(result, response.trajectory);
 			_motion_plan = result;
+
+			ROS_INFO("Result contains %d trajectory stages.", (int)result->trajectory_stages.size());
 			response.result = TrajectoryPlanning::Response::SUCCESS;
 		} else {
 			response.result = TrajectoryPlanning::Response::NO_FEASIBLE_TRAJECTORY_FOUND;
@@ -276,11 +278,11 @@ private:
 
 		ROS_INFO("Received trajectory execution request");
 
-		if(request.trajectory.size() == 0) {
-			ROS_ERROR("No trajectory provided in execution request");
-			response.result = TrajectoryExecution::Response::OTHER_ERROR;
-			return false;
-		}
+//		if(request.trajectory.size() == 0) {
+//			ROS_ERROR("No trajectory provided in execution request");
+//			response.result = TrajectoryExecution::Response::OTHER_ERROR;
+//			return false;
+//		}
 
 		if(!_motion_plan) {
 			ROS_ERROR("Unable to execute - no motion plan available!");

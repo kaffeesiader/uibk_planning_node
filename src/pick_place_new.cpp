@@ -426,10 +426,17 @@ public:
 					* Eigen::AngleAxisd(theta, Eigen::Vector3d::UnitY())
 					* Eigen::AngleAxisd(-0.5 * M_PI, Eigen::Vector3d::UnitZ());
 
-			pre_grasp_pose = grasp_pose;
-
 			grasp_pose.translation() = Eigen::Vector3d(xb, yb, zb);
-			pre_grasp_pose.translation() = Eigen::Vector3d(1.2*xb, 1.2*yb, 1.2*zb);
+
+			// Calculate pre grasp
+			xb = (radius + 0.2) * -sin(theta);
+			yb = (radius + 0.2) * cos(theta);
+
+			pre_grasp_pose = Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitX())
+					* Eigen::AngleAxisd(theta, Eigen::Vector3d::UnitY())
+					* Eigen::AngleAxisd(-0.5 * M_PI, Eigen::Vector3d::UnitZ());
+
+			pre_grasp_pose.translation() = Eigen::Vector3d(xb, yb, zb);
 
 			theta -= M_PI / 2 / angle_resolution;
 
