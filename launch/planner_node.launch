@@ -1,0 +1,14 @@
+<launch>
+
+    <node name="plan_execution_node"
+	    pkg="uibk_planning_node"
+	    type="plan_execution_node"
+	    output="screen">
+	    
+    <param name="planner_id" value="KPIECEkConfigDefault"/>
+    <param name="num_planning_attempts" value="10"/>
+    <param name="max_planning_time" value="5"/>
+    
+  </node>
+
+</launch>
