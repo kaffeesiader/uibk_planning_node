@@ -80,9 +80,9 @@ set(CMAKE_CXX_FLAGS "-std=c++0x")
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES uibk_planning_node
-#  CATKIN_DEPENDS roscpp
+# CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
 
@@ -123,6 +123,9 @@ target_link_libraries(state_planner ${catkin_LIBRARIES})
 add_library(kinematics_helper src/KinematicsHelper.cpp)
 target_link_libraries(kinematics_helper ${catkin_LIBRARIES})
 
+add_library(trajectory_planner src/TrajectoryPlannerImpr.cpp)
+target_link_libraries(trajectory_planner kinematics_helper ${catkin_LIBRARIES})
+
 ## Declare a cpp executable
 # add_executable(uibk_planning_node_node src/uibk_planning_node_node.cpp)
 
@@ -159,12 +162,13 @@ add_executable(test_pickup_planner tests/test_pickup_planner.cpp)
 add_dependencies(test_pickup_planner definitions_generate_messages_cpp)
 target_link_libraries(test_pickup_planner ${catkin_LIBRARIES})
 
-add_executable(ik_tests tests/ik_tests.cpp)
-target_link_libraries(ik_tests ${catkin_LIBRARIES})
-
 add_executable(kinematics_helper_tests tests/kinematics_helper_tests.cpp)
 add_dependencies(kinematics_helper_tests kinematics_helper)
 target_link_libraries(kinematics_helper_tests kinematics_helper ${catkin_LIBRARIES})
+
+add_executable(test_trajectory_planner tests/test_trajectory_planner.cpp)
+add_dependencies(test_trajectory_planner kinematics_helper trajectory_planner)
+target_link_libraries(test_trajectory_planner kinematics_helper trajectory_planner ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

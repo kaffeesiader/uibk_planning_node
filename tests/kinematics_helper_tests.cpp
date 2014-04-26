@@ -1,13 +1,20 @@
 
-#include <KinematicsHelper.h>
+#include <uibk_planning_node/KinematicsHelper.h>
+#include <uibk_planning_node/conversions.h>
 
 using namespace trajectory_planner_moveit;
 using namespace std;
 
 void printSolution(const moveit_msgs::RobotState &solution) {
 
-	for(size_t i = 0; i < solution.joint_state.name.size(); ++i) {
-		ROS_INFO("%s: %1.4f", solution.joint_state.name[i].c_str(), solution.joint_state.position[i]);
+	vector<string> joints;
+	getArmJointNames("right", joints);
+
+	vector<double> values;
+	getJointPositionsFromState(joints, solution, values);
+
+	for(size_t i = 0; i < joints.size(); ++i) {
+		ROS_INFO("%s: %1.4f", joints[i].c_str(), values[i]);
 	}
 }
 
@@ -56,7 +63,7 @@ int main(int argc, char *argv[])
 	pose.pose = goal1;
 
 	ROS_INFO("Computing test pose 1");
-	if(helper.computeIK("right_arm", pose, solution)) {
+	if(helper.computeIK("right", pose, solution)) {
 		printSolution(solution);
 		geometry_msgs::Pose pose;
 		ROS_INFO("Computing FK result for given solution");
@@ -73,7 +80,7 @@ int main(int argc, char *argv[])
 	pose.pose = goal2;
 	cout << endl;
 	ROS_INFO("Computing test pose 2");
-	if(helper.computeIK("right_arm", pose, solution)) {
+	if(helper.computeIK("right", pose, solution)) {
 		printSolution(solution);
 		geometry_msgs::Pose pose;
 		ROS_INFO("Computing FK result for given solution");
@@ -90,7 +97,7 @@ int main(int argc, char *argv[])
 	pose.pose = goal3;
 	cout << endl;
 	ROS_INFO("Computing test pose 3");
-	if(helper.computeIK("right_arm", pose, solution)) {
+	if(helper.computeIK("right", pose, solution)) {
 		printSolution(solution);
 		geometry_msgs::Pose pose;
 		ROS_INFO("Computing FK result for given solution");
@@ -119,7 +126,7 @@ int main(int argc, char *argv[])
 
 	cout << endl;
 	ROS_INFO("Computing test pose with collision");
-	if(helper.computeIK("right_arm", pose, solution, true)) {
+	if(helper.computeIK("right", pose, solution, true)) {
 //		printSolution(solution);
 		ROS_ERROR("Computation with collision possible");
 		return EXIT_FAILURE;
@@ -129,8 +136,30 @@ int main(int argc, char *argv[])
 
 	cout << endl;
 	ROS_INFO("Computing same pose without collision avoidance");
-	if(helper.computeIK("right_arm", pose, solution, false)) {
+	if(helper.computeIK("right", pose, solution, false)) {
 //		printSolution(solution);
+		ROS_INFO("Solution found as expected");
+	} else {
+		ROS_ERROR("Computation failed - no solution found");
+		return EXIT_FAILURE;
+	}
+
+	sensor_msgs::JointState seed;
+
+	seed.name.push_back("right_arm_0_joint");
+	seed.name.push_back("right_arm_1_joint");
+	seed.name.push_back("right_arm_2_joint");
+	seed.name.push_back("right_arm_3_joint");
+	seed.name.push_back("right_arm_4_joint");
+	seed.name.push_back("right_arm_5_joint");
+	seed.name.push_back("right_arm_6_joint");
+
+	seed.position.resize(7);
+
+	cout << endl;
+	ROS_INFO("Computing same pose with seed state");
+	if(helper.computeIK("right", pose, seed, solution, false)) {
+		printSolution(solution);
 		ROS_INFO("Solution found as expected");
 	} else {
 		ROS_ERROR("Computation failed - no solution found");

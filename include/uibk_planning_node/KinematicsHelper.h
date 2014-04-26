@@ -46,7 +46,7 @@ public:
 	 *
 	 * Maximum number of attempts and timeout can also be specified.
 	 *
-	 * @param group_name
+	 * @param arm left or right
 	 * @param goal
 	 * @param solution
 	 * @param avoid_collisions
@@ -54,7 +54,7 @@ public:
 	 * @param timeout
 	 * @return true on success
 	 */
-	bool computeIK(const string &group_name,
+	bool computeIK(const string &arm,
 				   const geometry_msgs::PoseStamped &goal,
 				   moveit_msgs::RobotState &solution,
 				   const bool avoid_collisions = true,
@@ -68,7 +68,7 @@ public:
 	 * The default is set to true.
 	 *
 	 * Maximum number of attempts and timeout can also be specified.
-	 * @param group_name
+	 * @param arm left or right
 	 * @param goal
 	 * @param seed_state
 	 * @param solution
@@ -77,7 +77,7 @@ public:
 	 * @param timeout
 	 * @return
 	 */
-	bool computeIK(const string &group_name,
+	bool computeIK(const string &arm,
 				   const geometry_msgs::PoseStamped &goal,
 				   const sensor_msgs::JointState &seed_state,
 				   moveit_msgs::RobotState &solution,
