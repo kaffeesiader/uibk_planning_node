@@ -126,6 +126,9 @@ target_link_libraries(kinematics_helper ${catkin_LIBRARIES})
 add_library(trajectory_planner src/TrajectoryPlannerImpr.cpp)
 target_link_libraries(trajectory_planner kinematics_helper ${catkin_LIBRARIES})
 
+add_library(visualization_tools src/VisualizationTools.cpp)
+target_link_libraries(visualization_tools ${catkin_LIBRARIES})
+
 ## Declare a cpp executable
 # add_executable(uibk_planning_node_node src/uibk_planning_node_node.cpp)
 
