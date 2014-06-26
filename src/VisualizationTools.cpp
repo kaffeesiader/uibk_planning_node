@@ -31,7 +31,7 @@ void VisualizationTools::publish_trajectory(const moveit_msgs::RobotState &start
 											const vector<moveit_msgs::RobotTrajectory> &trajectories)
 {
 	moveit_msgs::DisplayTrajectory msg;
-	msg.model_id = "robot_eddie";
+	msg.model_id = "Eddie";
 	msg.trajectory_start = start_state;
 
 	for (size_t i = 0; i < trajectories.size(); ++i) {

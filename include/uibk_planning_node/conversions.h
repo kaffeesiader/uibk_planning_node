@@ -2,7 +2,6 @@
 #define CONVERSIONS_H
 
 #include <sstream>
-
 #include <moveit_msgs/RobotState.h>
 
 using namespace std;

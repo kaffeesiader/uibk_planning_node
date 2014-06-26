@@ -6,7 +6,13 @@ project(uibk_planning_node)
 ## is used, also find other catkin packages
 
 ## find_package(catkin REQUIRED COMPONENTS moveit_core moveit_ros_planning moveit_ros_planning_interface pluginlib actionlib cmake_modules)
-find_package(catkin REQUIRED roscpp moveit_msgs sensor_msgs eigen moveit_core moveit_ros_planning_interface geometry_msgs definitions actionlib)
+find_package(catkin REQUIRED
+    roscpp
+    moveit_msgs
+    eigen
+    moveit_core
+    moveit_ros_planning_interface
+    actionlib)
 ## find_package(Boost REQUIRED system filesystem date_time thread)
 
 ## System dependencies are found with CMake's conventions
@@ -108,23 +114,15 @@ include_directories(
 add_library(planning_helper src/PlanningHelper.cpp)
 target_link_libraries(planning_helper ${catkin_LIBRARIES})
 
-add_library(pickup_planner src/pickupplanner.cpp)
-add_dependencies(pickup_planner definitions_generate_messages_cpp)
-target_link_libraries(pickup_planner ${catkin_LIBRARIES})
-
-add_library(cart_planner src/CartPlanner.cpp)
-add_dependencies(cart_planner definitions_generate_messages_cpp)
-target_link_libraries(cart_planner ${catkin_LIBRARIES})
-
-add_library(state_planner src/StatePlanner.cpp)
-add_dependencies(state_planner definitions_generate_messages_cpp)
-target_link_libraries(state_planner ${catkin_LIBRARIES})
-
 add_library(kinematics_helper src/KinematicsHelper.cpp)
 target_link_libraries(kinematics_helper ${catkin_LIBRARIES})
 
 add_library(trajectory_planner src/TrajectoryPlannerImpr.cpp)
 target_link_libraries(trajectory_planner kinematics_helper ${catkin_LIBRARIES})
+
+add_library(path_trajectory_planner src/PathTrajectoryPlanner.cpp)
+add_dependencies(path_trajectory_planner trajectory_planner)
+target_link_libraries(path_trajectory_planner trajectory_planner ${catkin_LIBRARIES})
 
 add_library(visualization_tools src/VisualizationTools.cpp)
 target_link_libraries(visualization_tools ${catkin_LIBRARIES})
@@ -142,28 +140,6 @@ target_link_libraries(visualization_tools ${catkin_LIBRARIES})
 
 add_executable(move_goal src/move_goal.cpp)
 target_link_libraries(move_goal ${catkin_LIBRARIES})
-
-add_executable(trajectory_planner_node src/trajectory_planner_node.cpp)
-add_dependencies(trajectory_planner_node
-    pickup_planner
-    state_planner
-    cart_planner
-    definitions_generate_messages_cpp
-)
-target_link_libraries(trajectory_planner_node
-    pickup_planner
-    cart_planner
-    state_planner
-    ${catkin_LIBRARIES}
-)
-
-add_executable(ping_gripper_only tests/ping_gripper_only.cpp)
-add_dependencies(ping_gripper_only definitions_generate_messages_cpp)
-target_link_libraries(ping_gripper_only ${catkin_LIBRARIES})
-
-add_executable(test_pickup_planner tests/test_pickup_planner.cpp)
-add_dependencies(test_pickup_planner definitions_generate_messages_cpp)
-target_link_libraries(test_pickup_planner ${catkin_LIBRARIES})
 
 add_executable(kinematics_helper_tests tests/kinematics_helper_tests.cpp)
 add_dependencies(kinematics_helper_tests kinematics_helper)

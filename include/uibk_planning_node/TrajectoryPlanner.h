@@ -1,14 +1,13 @@
 #ifndef TRAJECTORYPLANNER_H
 #define TRAJECTORYPLANNER_H
 
-#endif // TRAJECTORYPLANNER_H
-
 #include <ros/ros.h>
 
 #include <geometry_msgs/Pose.h>
 #include <moveit_msgs/GetMotionPlan.h>
 
 #include <uibk_planning_node/KinematicsHelper.h>
+#include <uibk_planning_node/PlannerBase.h>
 
 
 #define CAN_LOOK false
@@ -20,11 +19,10 @@ using namespace std;
 namespace trajectory_planner_moveit {
 
 
-class TrajectoryPlanner {
+class TrajectoryPlanner : public PlannerBase{
 
 private:
 
-	string arm_;
 	double planning_time_;
 	int planning_attempts_;
 	string planner_id_;
@@ -61,9 +59,6 @@ public:
 
 	~TrajectoryPlanner() {}
 
-	void setArm(const string &name) { arm_= name; }
-	string getArm() { return arm_; }
-
 	void setPlannerId(const string &planner_id) { planner_id_ = planner_id; }
 	string getPlannerId() { return planner_id_; }
 
@@ -76,6 +71,8 @@ public:
 	void setMaxTrajectoryPoints(int value) { max_traj_pts_ = value; }
 	int getMaxTrajectoryPoints() { return max_traj_pts_; }
 
+    const string getName() { return "TrajectoryPlanner"; }
+
 	bool plan(const geometry_msgs::Pose &goal, moveit_msgs::MotionPlanResponse &solution);
 	bool plan(const geometry_msgs::Pose &goal, moveit_msgs::MotionPlanResponse &solution, const sensor_msgs::JointState &start_state);
 
@@ -83,3 +80,6 @@ public:
 
 
 }
+
+
+#endif // TRAJECTORYPLANNER_H

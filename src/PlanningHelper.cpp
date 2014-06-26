@@ -5,12 +5,14 @@
  *      Author: Martin Griesser
  */
 
-#include <PlanningHelper.h>
+#include <uibk_planning_node/PlanningHelper.h>
 
 #include <moveit/kinematic_constraints/utils.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 
 using namespace std;
+
+namespace uibk_planning_node {
 
 PlanningHelper::PlanningHelper(const string &name) {
 
@@ -416,3 +418,5 @@ void PlanningHelper::setSupportSurfaceName(const string name) {
 string PlanningHelper::getSupportSurfaceName() {
 	return support_surface_;
 }
+
+} // end namespace

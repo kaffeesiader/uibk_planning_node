@@ -7,6 +7,8 @@ using namespace std;
 
 void printSolution(const moveit_msgs::RobotState &solution) {
 
+	// use the functions of the 'conversions.h' to easily extract the required joint values
+	// from the robot state message.
 	vector<string> joints;
 	getArmJointNames("right", joints);
 
@@ -54,7 +56,11 @@ int main(int argc, char *argv[])
 	goal3.orientation.z = 0.478419;
 	goal3.orientation.w = -0.554418;
 
+	// create an instance of our KinematicsHelper class
+	// be sure that MoveIt is launched!
 	KinematicsHelper helper(nh);
+
+	// this message holds the solution in case of success.
 	moveit_msgs::RobotState solution;
 
 	geometry_msgs::PoseStamped pose;
@@ -63,6 +69,7 @@ int main(int argc, char *argv[])
 	pose.pose = goal1;
 
 	ROS_INFO("Computing test pose 1");
+	// call the function in our helper class.
 	if(helper.computeIK("right", pose, solution)) {
 		printSolution(solution);
 		geometry_msgs::Pose pose;

@@ -16,9 +16,9 @@ namespace trajectory_planner_moveit {
 KinematicsHelper::KinematicsHelper(NodeHandle &nh)
 {
 	ik_client_ = nh.serviceClient<moveit_msgs::GetPositionIK>("compute_ik");
-	ik_client_.waitForExistence();
+//	ik_client_.waitForExistence();
 	fk_client_ = nh.serviceClient<moveit_msgs::GetPositionFK>("compute_fk");
-	//	fk_client_.waitForExistence();
+//	fk_client_.waitForExistence();
 }
 
 bool KinematicsHelper::computeIK(const string &arm,
@@ -67,6 +67,11 @@ bool KinematicsHelper::computeIKInternal(const moveit_msgs::GetPositionIKRequest
 
 	ROS_DEBUG_NAMED("KinematicsHelper", "Calling IK Service...");
 
+	if(!ik_client_.exists()) {
+		ROS_ERROR("The IK service client is not accessable - maybe MoveIt was not lauched correctly.");
+		return false;
+	}
+
 	if(ik_client_.call(request, response)) {
 
 		if(response.error_code.val == moveit_msgs::MoveItErrorCodes::SUCCESS) {
@@ -92,6 +97,11 @@ bool KinematicsHelper::computeFK(const moveit_msgs::RobotState &state,
 {
 	ROS_DEBUG_NAMED("KinematicsHelper", "FK request received for link '%s'.", link_name.c_str());
 
+	if(!fk_client_.exists()) {
+		ROS_ERROR("The FK service client is not accessable - maybe MoveIt was not lauched correctly.");
+		return false;
+	}
+
 	moveit_msgs::GetPositionFKRequest request;
 
 	request.header.stamp = ros::Time::now();
@@ -111,7 +121,7 @@ bool KinematicsHelper::computeFK(const moveit_msgs::RobotState &state,
 
 			solution = response.pose_stamped[0].pose;
 
-			ROS_INFO_NAMED("KinematicsHelper", "FK pose successfully calculated");
+            ROS_DEBUG_NAMED("KinematicsHelper", "FK pose successfully calculated");
 
 			return true;
 		} else {

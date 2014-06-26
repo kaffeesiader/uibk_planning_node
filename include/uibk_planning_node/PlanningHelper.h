@@ -5,8 +5,8 @@
  *      Author: Martin Griesser
  */
 
-#ifndef PLAN_EXECUTION_H_
-#define PLAN_EXECUTION_H_
+#ifndef PLANNING_HELPER_H_
+#define PLANNING_HELPER_H_
 
 /*
  * PlanExecution.cpp
@@ -39,7 +39,7 @@
 using namespace std;
 using namespace moveit_msgs;
 
-
+namespace uibk_planning_node {
 
 struct PlanningResult {
 	int type;
@@ -123,5 +123,6 @@ private:
 
 typedef boost::shared_ptr<PlanningHelper> PlanningHelperPtr;
 
+}
 
-#endif /* PLAN_EXECUTION_H_ */
+#endif /* PLANNING_HELPER_H_ */
